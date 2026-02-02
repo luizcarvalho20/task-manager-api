@@ -1,0 +1,127 @@
+{
+  "info": {
+    "_postman_id": "3c076cd3-47de-4032-bf7f-88d1936ef7c4",
+    "name": "task-manager-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "CREATE task",
+      "id": "5c011d5c-5cd4-4b8f-b565-b0d1afd1c27d",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Primeira task\",\r\n  \"description\": \"Criada via API\",\r\n  \"userId\": \"cml5m1s1k0000dow44qycmuxt\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "READ task",
+      "id": "065a1a8f-d5e5-4977-ac7e-b1f7d35a9c26",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Primeira task\",\r\n  \"description\": \"Criada via API\",\r\n  \"userId\": \"cml5m1s1k0000dow44qycmuxt\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE task",
+      "id": "2a846405-fc5a-44f1-9cd9-36850b22d931",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": true }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/cml5mxda50003dorkwrq9fdkk",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "cml5mxda50003dorkwrq9fdkk"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE task",
+      "id": "c9281edf-3aa1-4b02-bc79-3fefa3398fbf",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": true }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/cml5nnpvk0001dogoas95qdib",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "cml5nnpvk0001dogoas95qdib"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
