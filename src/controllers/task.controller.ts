@@ -1,52 +1,95 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
+import {
+  createTaskSchema,
+  updateTaskSchema,
+} from "../validators/task.schema";
 
 export class TaskController {
+  // CREATE
   static async create(req: Request, res: Response) {
-    const { title, description, userId } = req.body;
+    try {
+      const data = createTaskSchema.parse(req.body);
 
-    const task = await prisma.task.create({
-      data: {
-        title,
-        description,
-        userId,
-      },
-    });
+      const task = await prisma.task.create({
+        data,
+      });
 
-    return res.status(201).json(task);
+      return res.status(201).json(task);
+    } catch (error: any) {
+      if (error?.name === "ZodError") {
+        return res.status(400).json({
+          message: "Dados inválidos",
+          errors: error.errors,
+        });
+      }
+
+      return res.status(500).json({ message: "Internal server error" });
+    }
   }
 
+  // LIST
   static async list(_req: Request, res: Response) {
-    const tasks = await prisma.task.findMany();
-    return res.status(200).json(tasks);
+    try {
+      const tasks = await prisma.task.findMany();
+      return res.status(200).json(tasks);
+    } catch {
+      return res.status(500).json({ message: "Internal server error" });
+    }
   }
 
+  // UPDATE
   static async update(req: Request, res: Response) {
-    const { id } = req.params;
-    const { title, description, completed } = req.body;
+    try {
+      const { id } = req.params;
 
-    // Monta o "data" só com campos que vieram no body (evita sobrescrever com undefined)
-    const data: { title?: string; description?: string | null; completed?: boolean } = {};
+      // valida body
+      const validatedData = updateTaskSchema.parse(req.body);
 
-    if (title !== undefined) data.title = title;
-    if (description !== undefined) data.description = description;
-    if (completed !== undefined) data.completed = completed;
+      if (Object.keys(validatedData).length === 0) {
+        return res.status(400).json({
+          message: "Nenhum campo válido enviado para atualização",
+        });
+      }
 
-    const task = await prisma.task.update({
-      where: { id },
-      data,
-    });
+      const task = await prisma.task.update({
+        where: { id },
+        data: validatedData,
+      });
 
-    return res.status(200).json(task);
+      return res.status(200).json(task);
+    } catch (error: any) {
+      if (error?.name === "ZodError") {
+        return res.status(400).json({
+          message: "Dados inválidos",
+          errors: error.errors,
+        });
+      }
+
+      if (error?.code === "P2025") {
+        return res.status(404).json({ message: "Task not found" });
+      }
+
+      return res.status(500).json({ message: "Internal server error" });
+    }
   }
 
+  // DELETE
   static async delete(req: Request, res: Response) {
-    const { id } = req.params;
+    try {
+      const { id } = req.params;
 
-    await prisma.task.delete({
-      where: { id },
-    });
+      await prisma.task.delete({
+        where: { id },
+      });
 
-    return res.status(204).send();
+      return res.status(204).send();
+    } catch (error: any) {
+      if (error?.code === "P2025") {
+        return res.status(404).json({ message: "Task not found" });
+      }
+
+      return res.status(500).json({ message: "Internal server error" });
+    }
   }
 }

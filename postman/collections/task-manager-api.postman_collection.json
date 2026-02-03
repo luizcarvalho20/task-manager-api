@@ -122,6 +122,155 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "CREATE INVALIDO task",
+      "id": "89efbc75-bf34-4afd-acf5-3d5cac2aecd3",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE INVALIDO DADOS INEXISTENTES",
+      "id": "63bd26a6-1211-4c6d-ae45-ec76f6114dbe",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": \"true\" }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/teste",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "teste"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE INVALIDO CAMPO VAZIO",
+      "id": "72b235f1-8247-4b9f-8393-91e1b0c46834",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/cml5m1s1k0000dow44qycm",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "cml5m1s1k0000dow44qycm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPTADE INVALIDO",
+      "id": "c4e3756f-06f5-4c9f-80bb-ada105cd5423",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": \"true\" }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/cml6rf0e00001doo84pfq8mi0",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "cml6rf0e00001doo84pfq8mi0"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE DADOS INEXISTENTES",
+      "id": "4b819980-aaca-4f08-8c12-f07ec89136e7",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": true }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/teste",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "teste"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }
