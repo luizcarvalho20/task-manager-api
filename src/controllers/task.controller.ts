@@ -9,7 +9,13 @@ export class TaskController {
   // CREATE
   static async create(req: Request, res: Response) {
     try {
-      const data = createTaskSchema.parse(req.body);
+      const body = createTaskSchema.parse(req.body);
+
+const data = {
+  ...body,
+  userId: req.userId!,
+};
+
 
       const task = await prisma.task.create({
         data,
@@ -41,7 +47,7 @@ export class TaskController {
   // UPDATE
   static async update(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const id = String(req.params.id);
 
       // valida body
       const validatedData = updateTaskSchema.parse(req.body);
@@ -77,7 +83,7 @@ export class TaskController {
   // DELETE
   static async delete(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const id = String(req.params.id);
 
       await prisma.task.delete({
         where: { id },

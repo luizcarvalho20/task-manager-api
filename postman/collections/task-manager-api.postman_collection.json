@@ -6,7 +6,7 @@
   },
   "item": [
     {
-      "name": "CREATE task",
+      "name": "CRIA TASK",
       "id": "5c011d5c-5cd4-4b8f-b565-b0d1afd1c27d",
       "request": {
         "method": "POST",
@@ -35,7 +35,7 @@
       "response": []
     },
     {
-      "name": "READ task",
+      "name": "READ TASK",
       "id": "065a1a8f-d5e5-4977-ac7e-b1f7d35a9c26",
       "request": {
         "method": "GET",
@@ -124,7 +124,7 @@
       "response": []
     },
     {
-      "name": "CREATE INVALIDO task",
+      "name": "CRIAR TASK INVALIDO",
       "id": "89efbc75-bf34-4afd-acf5-3d5cac2aecd3",
       "request": {
         "method": "POST",
@@ -267,6 +267,105 @@
           "path": [
             "tasks",
             "teste"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REGISTRAR USUARIO",
+      "id": "bcca7213-67c8-4235-9130-4b7d9bafe9ac",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Luiz\",\r\n  \"email\": \"luiz@email.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LOGIN",
+      "id": "7ccf1cac-0d5f-4b07-b8b7-999532b2cbed",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"luiz@email.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CRIAR TASK PROTEGIDA",
+      "id": "5d6e93f9-1695-4d2b-883e-686da71dafd1",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbWw4MjVsa3UwMDAwZG9qbzAzdzN3cXk2IiwiaWF0IjoxNzcwMjExOTM4LCJleHAiOjE3NzAyOTgzMzh9.wS-YRSWSb5Yd7E6doc2x8GAqJXs1-UmvfXg2S-CiBAA",
+            "type": "text",
+            "uuid": "7899769a-08a4-4e49-83b6-ea8e46bbeb64"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Task autenticada\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
           ]
         }
       },
