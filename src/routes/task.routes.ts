@@ -2,7 +2,7 @@ import { Router } from "express";
 import { TaskController } from "../controllers/task.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
 
-const router = Router();
+const router = Router();    
 
 router.post("/", authMiddleware, TaskController.create);
 router.get("/", authMiddleware, TaskController.list);

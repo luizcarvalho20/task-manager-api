@@ -370,6 +370,572 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "REGISTRAR USER A",
+      "id": "b75e9b6b-ef4a-4712-8ed2-0797fe1db860",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Usuario A\",\r\n  \"email\": \"a_teste01@teste.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LOGIN USER A",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "68f06ecb-f1ed-4a38-86f5-4a4b2cd5b13f",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "9d9abdaf-16ac-4206-817d-2b4caf4d681e",
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"tokenA\", json.token);\r",
+              "pm.test(\"Token A salvo no environment\", () => {\r",
+              "  pm.expect(pm.environment.get(\"tokenA\")).to.be.a(\"string\");\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "bf5db999-4824-4686-9cb1-5f793443ce4d",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"a_teste01@teste.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CRIAR TASK USER A",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "d20731c1-ec25-47bf-ba7d-de80ce5cc997",
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"taskIdA\", json.id);\r",
+              "\r",
+              "pm.test(\"TaskIdA salvo\", () => {\r",
+              "  pm.expect(pm.environment.get(\"taskIdA\")).to.be.a(\"string\");\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "8fe953c1-3b2b-4f69-898d-a818bb54de94",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "35afd239-caf2-4f31-a4de-9b134517f5db",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenA}}",
+            "type": "text",
+            "uuid": "f76ed563-d277-4c0a-b2b9-b1da110a6b5f"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Task do usuario A\",\r\n  \"description\": \"Criada via teste\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "REGISTRAR USER B",
+      "id": "05724dde-ca52-4a81-83db-169740cd6ab3",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Usuario B\",\r\n  \"email\": \"b_teste01@teste.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LOGIN USER B",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "68f06ecb-f1ed-4a38-86f5-4a4b2cd5b13f",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "9d9abdaf-16ac-4206-817d-2b4caf4d681e",
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"tokenB\", json.token);\r",
+              "\r",
+              "pm.test(\"Token B foi salvo\", () => {\r",
+              "  pm.expect(json.token).to.be.a(\"string\");\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "43d2e23f-9cd3-4c74-91fe-fdee273ab9d7",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"b_teste01@teste.com\",\r\n  \"password\": \"123456\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/users/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CRIAR TASK USER B",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "d20731c1-ec25-47bf-ba7d-de80ce5cc997",
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"taskIdB\", json.id);\r",
+              "\r",
+              "pm.test(\"taskIdB salvo\", () => {\r",
+              "  pm.expect(pm.environment.get(\"taskIdB\")).to.be.a(\"string\");\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "8fe953c1-3b2b-4f69-898d-a818bb54de94",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "a43dfabb-822e-4da2-9d77-2688ffb74631",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenB}}",
+            "type": "text",
+            "uuid": "f76ed563-d277-4c0a-b2b9-b1da110a6b5f"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Task do usuario B\",\r\n  \"description\": \"Criada via teste\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LIST TASK USER A",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "5d8385b2-7682-4fc5-ba65-b3ea8db12451",
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Lista tasks (200)\", () => {\r",
+              "  pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Retorna array\", () => {\r",
+              "  pm.expect(json).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Contém task criada\", () => {\r",
+              "  const taskIdA = pm.environment.get(\"taskIdA\");\r",
+              "  const found = json.some(t => t.id === taskIdA);\r",
+              "  pm.expect(found).to.eql(true);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "a35ea138-cc8f-4de5-89c1-8cd83673e64e",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenA}}",
+            "type": "text",
+            "uuid": "76018fa3-9549-45bb-a70b-1ff30a0564b6"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE A COM B (deve falhar)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "e5f8d3e0-5c92-43ec-b5fd-e1be11d8fcea",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "4d2bfee1-1539-47f4-9f50-f8676ff39695",
+            "exec": [
+              "pm.test(\"Não pode atualizar task de outro usuário\", () => {\r",
+              "  pm.expect([403, 404]).to.include(pm.response.code);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "bf9870ec-ed3b-4a6e-a7d7-c7c7135d9c17",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenB}}",
+            "type": "text",
+            "uuid": "3b263633-1162-457c-bb9e-eafb97b0c7a9"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": true }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/tasks/{{taskIdA}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "tasks",
+            "{{taskIdA}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE A COM B (deve falhar)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "f7185c2f-45b3-40a5-a51e-230e0d88b409",
+            "exec": [
+              "pm.test(\"Não pode deletar task de outro usuário\", () => {\r",
+              "  pm.expect([403, 404]).to.include(pm.response.code);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "d94bb78a-2d40-4c68-82be-47f2393f7de2",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenB}}",
+            "type": "text",
+            "uuid": "d8daa491-6f32-427a-9329-d1c90a7f2cbb"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": true }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks/{{taskIdA}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "tasks",
+            "{{taskIdA}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE da task do A usando tokenA (deve funcionar)",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "e2ba5da5-bd09-4856-9158-777ef94463b3",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "7a965c11-b6c5-4322-96da-286fcd488297",
+            "exec": [
+              "pm.test(\"Deletou task (204)\", () => {\r",
+              "  pm.expect(pm.response.code).to.eql(204);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "91bf4966-c655-4e67-812a-27cd88c0f581",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{tokenA}}",
+            "type": "text",
+            "uuid": "f003f4a9-f7df-4d49-93d9-56828f27afce"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"completed\": true }\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tasks/{{taskIdA}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "tasks",
+            "{{taskIdA}}"
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

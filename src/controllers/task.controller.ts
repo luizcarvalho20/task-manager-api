@@ -35,67 +35,76 @@ const data = {
   }
 
   // LIST
-  static async list(_req: Request, res: Response) {
-    try {
-      const tasks = await prisma.task.findMany();
-      return res.status(200).json(tasks);
-    } catch {
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
+  static async list(req: Request, res: Response) {
+  const userId = (req as any).userId;
 
+  const tasks = await prisma.task.findMany({
+    where: { userId },
+  });
+
+  return res.json(tasks);
+}
   // UPDATE
-  static async update(req: Request, res: Response) {
-    try {
-      const id = String(req.params.id);
+ static async update(req: Request, res: Response) {
+  try {
+    const id = String(req.params.id);
+    const userId = (req as any).userId;
 
-      // valida body
-      const validatedData = updateTaskSchema.parse(req.body);
+    const validatedData = updateTaskSchema.parse(req.body);
 
-      if (Object.keys(validatedData).length === 0) {
-        return res.status(400).json({
-          message: "Nenhum campo válido enviado para atualização",
-        });
-      }
-
-      const task = await prisma.task.update({
-        where: { id },
-        data: validatedData,
+    if (Object.keys(validatedData).length === 0) {
+      return res.status(400).json({
+        message: "Nenhum campo válido enviado para atualização",
       });
-
-      return res.status(200).json(task);
-    } catch (error: any) {
-      if (error?.name === "ZodError") {
-        return res.status(400).json({
-          message: "Dados inválidos",
-          errors: error.errors,
-        });
-      }
-
-      if (error?.code === "P2025") {
-        return res.status(404).json({ message: "Task not found" });
-      }
-
-      return res.status(500).json({ message: "Internal server error" });
     }
-  }
 
+    // Verifica se a task existe e pertence ao usuário
+    const existingTask = await prisma.task.findFirst({
+      where: { id, userId },
+    });
+
+    if (!existingTask) {
+      return res.status(404).json({ message: "Task não encontrada" });
+    }
+
+    const task = await prisma.task.update({
+      where: { id },
+      data: validatedData,
+    });
+
+    return res.status(200).json(task);
+  } catch (error: any) {
+    if (error?.name === "ZodError") {
+      return res.status(400).json({
+        message: "Dados inválidos",
+        errors: error.errors,
+      });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
   // DELETE
-  static async delete(req: Request, res: Response) {
-    try {
-      const id = String(req.params.id);
+ static async delete(req: Request, res: Response) {
+  try {
+    const id = String(req.params.id);
+    const userId = (req as any).userId;
 
-      await prisma.task.delete({
-        where: { id },
-      });
+    const existingTask = await prisma.task.findFirst({
+      where: { id, userId },
+    });
 
-      return res.status(204).send();
-    } catch (error: any) {
-      if (error?.code === "P2025") {
-        return res.status(404).json({ message: "Task not found" });
-      }
-
-      return res.status(500).json({ message: "Internal server error" });
+    if (!existingTask) {
+      return res.status(404).json({ message: "Task não encontrada" });
     }
+
+    await prisma.task.delete({
+      where: { id },
+    });
+
+    return res.status(204).send();
+  } catch {
+    return res.status(500).json({ message: "Internal server error" });
   }
+}
 }
