@@ -1,64 +1,61 @@
-🗂️ Task Manager API
+# Task Manager API
 
-API REST para gerenciamento de tarefas (tasks), desenvolvida em Node.js com TypeScript, utilizando Express e Prisma ORM.
+API REST para gerenciamento de tarefas (tasks) com autenticação de usuários, desenvolvida em **Node.js + TypeScript**, utilizando **Express**, **Prisma ORM** e **JWT**.
 
-Este projeto faz parte de um roadmap de estudos focado em backend, testes e qualidade de software, evoluindo diariamente com novas funcionalidades, autenticação, validações e testes automatizados.
+Este projeto faz parte de um roadmap de estudos focado em **backend e qualidade de software**, evoluindo diariamente com novas funcionalidades, validações, autenticação e testes automatizados.
+
+---
 
 ## 🚀 Tecnologias Utilizadas
 
-Node.js
+- Node.js
+- TypeScript
+- Express
+- Prisma ORM
+- SQLite (ambiente de desenvolvimento)
+- JWT (JSON Web Token)
+- Zod (validação de dados)
+- Postman (testes de API)
+- Newman (execução de testes automatizados via CLI)
+- Git & GitHub
 
-TypeScript
-
-Express
-
-Prisma ORM
-
-SQLite (ambiente de desenvolvimento)
-
-JWT (Autenticação)
-
-Zod (Validação de dados)
-
-Postman (Testes manuais e automatizados)
-
-Newman (Execução de testes via CLI)
-
-Git & GitHub
+---
 
 ## 📂 Estrutura do Projeto
 ```
 src/
-├─ app.ts              # Configuração principal do Express
-├─ server.ts           # Inicialização do servidor
+├─ app.ts # Configuração principal do Express
+├─ server.ts # Inicialização do servidor
 ├─ config/
-│  └─ prisma.ts        # Instância do Prisma Client
+│ └─ prisma.ts # Instância do Prisma Client
 ├─ controllers/
-│  ├─ task.controller.ts
-│  └─ user.controller.ts
+│ ├─ task.controller.ts
+│ └─ user.controller.ts
 ├─ routes/
-│  ├─ task.routes.ts
-│  └─ user.routes.ts
+│ ├─ task.routes.ts
+│ └─ user.routes.ts
 ├─ middlewares/
-│  └─ auth.middleware.ts
+│ └─ auth.middleware.ts # Middleware de autenticação JWT
 └─ validators/
-   ├─ task.schema.ts
-   └─ user.schema.ts
+├─ task.schema.ts # Validações de Task (Zod)
+└─ user.schema.ts # Validações de User (Zod)
 
-postman/
-├─ collections/
-│  └─ task-manager-api.postman_collection.json
-└─ environments/
-   └─ local.postman_environment.json
+prisma/
+└─ schema.prisma # Schema do banco de dados
 ```
+---
+
 ## ⚙️ Como Rodar o Projeto Localmente
-Pré-requisitos
 
-Node.js (versão 18+ recomendada)
+### Pré-requisitos
 
-npm
+- Node.js (versão 18+ recomendada)
+- npm
 
-1️⃣ Clonar o repositório
+---
+
+### 1️⃣ Clonar o repositório
+
 ```
 git clone https://github.com/luizcarvalho20/task-manager-api.git
 cd task-manager-api
@@ -67,6 +64,7 @@ cd task-manager-api
 ```
 npm install
 ```
+
 3️⃣ Configurar variáveis de ambiente
 
 Crie um arquivo .env na raiz do projeto:
@@ -82,7 +80,6 @@ npx prisma migrate dev
 ```
 npm run dev
 ```
-
 6️⃣ Verificar se a API está rodando
 
 Acesse no navegador:
@@ -94,6 +91,17 @@ Resposta esperada:
 ```
 { "status": "ok" }
 ```
+## 🔐 Autenticação
+
+A API utiliza JWT para autenticação.
+
+Após fazer login, você deve enviar o token no header:
+```
+Authorization: Bearer SEU_TOKEN_AQUI
+
+```
+As rotas de tasks são protegidas e exigem token válido.
+
 ## 📌 Endpoints Disponíveis
 🔹 Healthcheck
 
@@ -103,128 +111,102 @@ GET /health
 Registrar usuário
 
 POST /users/register
-
-Body:
 ```
 {
-  "name": "Usuário",
-  "email": "email@teste.com",
+  "name": "Luiz",
+  "email": "luiz@email.com",
   "password": "123456"
 }
 ```
 Login
 
 POST /users/login
-
-Body:
 ```
 {
-  "email": "email@teste.com",
+  "email": "luiz@email.com",
   "password": "123456"
 }
-
 ```
+
 Resposta:
 ```
 {
-  "token": "JWT_TOKEN_AQUI"
+  "token": "JWT_AQUI"
 }
-````
-✅ Tasks (Rotas Protegidas com JWT)
+```
+✅ Tasks (rotas protegidas)
 
-Todas as rotas abaixo exigem o header:
-```
-Authorization: Bearer SEU_TOKEN_AQUI
-```
-Criar Task
+Todas exigem header: Authorization: Bearer TOKEN
+
+Criar task
 
 POST /tasks
-
-Body:
 ```
 {
   "title": "Minha task",
   "description": "Descrição opcional"
 }
-````
-Listar Tasks do usuário autenticado
+```
+Listar tasks do usuário autenticado
 
 - GET /tasks
 
-Atualizar Task
+Atualizar task
 
 - PUT /tasks/:id
-
-Body:
 ```
 {
   "title": "Novo título",
   "completed": true
 }
 ```
-Deletar Task
+Deletar task
 
 - DELETE /tasks/:id
-## 🧪 Testes
+## 🧪 Testes Automatizados (Postman + Newman)
 
-Os testes da API são feitos com Postman e podem ser executados de duas formas:
+Este projeto possui collection e environment do Postman versionados para execução de testes automatizados.
 
-✅ 1. Pelo Postman (Interface Gráfica)
-
-Importe a collection:
+▶️ Rodar os testes via terminal:
 ```
-postman/collections/task-manager-api.postman_collection.json
+npx newman run postman/collections/task-manager-api.postman_collection.json \
+  -e postman/environments/local.postman_environment.json
 ```
+✅ O que os testes cobrem:
 
-Importe o environment:
-```
-postman/environments/local.postman_environment.json
-```
+Registro de usuário
 
-Execute a collection pelo Runner do Postman
+Login e captura automática do token
 
-Os testes:
+Criação de task autenticada
 
-- Criam usuários
+Listagem de tasks do usuário
 
-- Fazem login
+Atualização de task
 
-- Salvam tokens em variáveis de ambiente
+Exclusão de task
 
-- Criam tasks
+Validações de status code e formato de resposta
 
-- Listam, validam e removem tasks
+🛣️ Roadmap
 
-- Verificam status codes e respostas
+- CRUD de Tasks ✅
 
-✅ 2. Pelo Terminal (Newman)
+- Validação de dados com Zod ✅
 
-No terminal, na raiz do projeto:
-```
-npx newman run postman/collections/task-manager-api.postman_collection.json -e postman/environments/local.postman_environment.json
-```
+- CRUD de Usuários ✅
 
-Você deverá ver um resumo com todos os testes passando ✅
+- Autenticação com JWT ✅
 
-## 🛣️ Roadmap (Evolução do Projeto)
+- Proteção de rotas ✅
 
-✅ CRUD de Tasks
+- Testes automatizados com Postman + Newman ✅
 
-✅ CRUD de Usuários
+- Testes automatizados com Jest + Supertest ⏳
 
-✅ Validação de dados com Zod
+- CI com GitHub Actions ⏳
 
-✅ Autenticação com JWT
-
-✅ Proteção de rotas
-
-✅ Testes automatizados com Postman + Newman
-
-⏳ Testes com Jest + Supertest
-
-⏳ CI com GitHub Actions
-
-⏳ Dockerização do projeto
+- Documentação com Swagger/OpenAPI ⏳
 
 📝 Observações
 
@@ -234,9 +216,11 @@ O projeto está em evolução contínua.
 
 Cada etapa do roadmap gera commits incrementais e documentados.
 
-Este repositório serve como projeto de estudo e portfólio backend.
+O foco do projeto é boas práticas de backend, testes e qualidade de código.
 
 👨‍💻 Autor
 
-Desenvolvido por Luiz Carvalho
-Projeto de estudo focado em Backend, APIs REST, autenticação, testes e qualidade de software.
+Desenvolvido por **Luiz Felipe Carvalho**
+
+
+Projeto de estudo focado em backend, APIs REST e qualidade de software.
