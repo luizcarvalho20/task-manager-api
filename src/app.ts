@@ -1,12 +1,17 @@
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+
 import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
-
+import { swaggerSpec } from "./config/swagger";
 
 const app = express();
 
-// Middlewares essenciaisx
+// Middlewares essenciais
 app.use(express.json());
+
+// Swagger
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rotas de usuários
 app.use("/users", userRoutes);
