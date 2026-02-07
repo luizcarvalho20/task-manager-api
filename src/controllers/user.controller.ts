@@ -9,6 +9,11 @@ export class UserController {
     try {
       const { name, email, password } = req.body;
 
+      // validação mínima para evitar 500 por payload inválido
+      if (!name || !email || !password) {
+        return res.status(400).json({ message: "Dados inválidos" });
+      }
+
       const existingUser = await prisma.user.findUnique({
         where: { email },
       });
@@ -32,7 +37,8 @@ export class UserController {
         name: user.name,
         email: user.email,
       });
-    } catch {
+    } catch (error) {
+      console.error("[UserController.register] error:", error);
       return res.status(500).json({ message: "Internal server error" });
     }
   }
@@ -41,6 +47,11 @@ export class UserController {
   static async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
+
+      // validação mínima para evitar 500 por payload inválido
+      if (!email || !password) {
+        return res.status(400).json({ message: "Dados inválidos" });
+      }
 
       const user = await prisma.user.findUnique({
         where: { email },
@@ -56,14 +67,15 @@ export class UserController {
         return res.status(401).json({ message: "Credenciais inválidas" });
       }
 
-      const token = jwt.sign(
-        { userId: user.id },
-        process.env.JWT_SECRET || "dev_secret",
-        { expiresIn: "1d" }
-      );
+      const secret = process.env.JWT_SECRET || "dev_secret";
 
-      return res.json({ token });
-    } catch {
+      const token = jwt.sign({ userId: user.id }, secret, {
+        expiresIn: "1d",
+      });
+
+      return res.status(200).json({ token });
+    } catch (error) {
+      console.error("[UserController.login] error:", error);
       return res.status(500).json({ message: "Internal server error" });
     }
   }

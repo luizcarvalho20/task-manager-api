@@ -2,23 +2,24 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    # ✅ ENV NO NÍVEL DO JOB (vale para todos os steps)
     env:
       DATABASE_URL: "file:./dev.db"
       JWT_SECRET: "ci-secret"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
@@ -26,19 +27,19 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      # ✅ cria .env também (backup caso prisma/config não herde env)
-      - name: Create .env for Prisma
+      - name: Create .env for Prisma and App
         run: |
           echo 'DATABASE_URL="file:./dev.db"' > .env
-          
+          echo 'JWT_SECRET="ci-secret"' >> .env
+
       - name: Debug env
-        run: node -e "console.log('DATABASE_URL=', process.env.DATABASE_URL)"
-    
+        run: node -e "console.log('DATABASE_URL=', process.env.DATABASE_URL); console.log('JWT_SECRET set=', !!process.env.JWT_SECRET)"
 
       - name: Generate Prisma Client
-        run: DATABASE_URL="file:./dev.db" npx prisma generate
+        run: npx prisma generate
 
+      - name: Run migrations
+        run: npx prisma migrate deploy
 
       - name: Run tests
-        run: DATABASE_URL="file:./dev.db" JWT_SECRET="ci-secret" npm test
-
+        run: npm test
