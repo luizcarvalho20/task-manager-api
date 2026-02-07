@@ -2,7 +2,7 @@
 
 API REST para gerenciamento de tarefas (tasks) com autenticação de usuários, desenvolvida em **Node.js + TypeScript**, utilizando **Express**, **Prisma ORM** e **JWT**.
 
-Este projeto faz parte de um roadmap de estudos focado em **backend e qualidade de software**, evoluindo diariamente com novas funcionalidades, validações, autenticação e testes automatizados.
+Este projeto faz parte de um roadmap de estudos focado em **backend e qualidade de software**, evoluindo diariamente com novas funcionalidades, validações, autenticação, testes automatizados e CI.
 
 ---
 
@@ -15,34 +15,42 @@ Este projeto faz parte de um roadmap de estudos focado em **backend e qualidade 
 - SQLite (ambiente de desenvolvimento)
 - JWT (JSON Web Token)
 - Zod (validação de dados)
-- Postman (testes de API)
-- Newman (execução de testes automatizados via CLI)
+- Swagger / OpenAPI (documentação)
+- Jest + Supertest (testes automatizados)
+- Postman + Newman (testes de API)
+- GitHub Actions (CI)
 - Git & GitHub
 
 ---
 
 ## 📂 Estrutura do Projeto
+
 ```
 src/
-├─ app.ts # Configuração principal do Express
-├─ server.ts # Inicialização do servidor
+├─ app.ts              # Configuração do Express
+├─ server.ts           # Inicialização do servidor
 ├─ config/
-│ └─ prisma.ts # Instância do Prisma Client
+│  ├─ prisma.ts        # Prisma Client
+│  └─ swagger.ts       # Configuração do Swagger
 ├─ controllers/
-│ ├─ task.controller.ts
-│ └─ user.controller.ts
+│  ├─ task.controller.ts
+│  └─ user.controller.ts
 ├─ routes/
-│ ├─ task.routes.ts
-│ └─ user.routes.ts
+│  ├─ task.routes.ts
+│  └─ user.routes.ts
 ├─ middlewares/
-│ └─ auth.middleware.ts # Middleware de autenticação JWT
-└─ validators/
-├─ task.schema.ts # Validações de Task (Zod)
-└─ user.schema.ts # Validações de User (Zod)
+│  └─ auth.middleware.ts
+├─ validators/
+│  ├─ task.schema.ts
+│  └─ user.schema.ts
+└─ tests/
+   ├─ health.test.ts
+   └─ tasks.test.ts
 
 prisma/
-└─ schema.prisma # Schema do banco de dados
+└─ schema.prisma
 ```
+
 ---
 
 ## ⚙️ Como Rodar o Projeto Localmente
@@ -56,72 +64,109 @@ prisma/
 
 ### 1️⃣ Clonar o repositório
 
-```
+```bash
 git clone https://github.com/luizcarvalho20/task-manager-api.git
 cd task-manager-api
 ```
-2️⃣ Instalar dependências
-```
+
+### 2️⃣ Instalar dependências
+
+```bash
 npm install
 ```
 
-3️⃣ Configurar variáveis de ambiente
+### 3️⃣ Configurar variáveis de ambiente
 
-Crie um arquivo .env na raiz do projeto:
-```
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="sua_chave_secreta_aqui"
 ```
-4️⃣ Rodar as migrações do banco
-```
+
+### 4️⃣ Rodar as migrações do banco
+
+```bash
 npx prisma migrate dev
 ```
-5️⃣ Iniciar o servidor
+
+### 5️⃣ Gerar o Prisma Client
+
+```bash
+npx prisma generate
 ```
+
+### 6️⃣ Iniciar o servidor
+
+```bash
 npm run dev
 ```
-6️⃣ Verificar se a API está rodando
+
+### 7️⃣ Testar se está rodando
 
 Acesse no navegador:
-```
+
 http://localhost:3000/health
-```
 
 Resposta esperada:
-```
+
+```json
 { "status": "ok" }
 ```
+
+---
+
+## 📚 Documentação (Swagger)
+
+Após rodar o projeto, acesse:
+
+http://localhost:3000/docs
+
+Você terá acesso à documentação completa da API com:
+- Rotas de usuários
+- Rotas de tasks
+- Autenticação JWT
+- Schemas de request/response
+- Testes interativos via Swagger UI
+
+---
+
 ## 🔐 Autenticação
 
-A API utiliza JWT para autenticação.
+A API utiliza JWT.
 
-Após fazer login, você deve enviar o token no header:
-```
+Após fazer login, envie o token no header:
+
 Authorization: Bearer SEU_TOKEN_AQUI
 
-```
-As rotas de tasks são protegidas e exigem token válido.
+As rotas de **/tasks** são protegidas e exigem token válido.
 
-## 📌 Endpoints Disponíveis
-🔹 Healthcheck
+---
 
-GET /health
+## 📌 Endpoints Principais
 
-👤 Usuários
-Registrar usuário
+### 🔹 Healthcheck
+- GET `/health`
 
-POST /users/register
-```
+---
+
+### 👤 Usuários
+
+#### Registrar usuário
+- POST `/users/register`
+
+```json
 {
   "name": "Luiz",
   "email": "luiz@email.com",
   "password": "123456"
 }
 ```
-Login
 
-POST /users/login
-```
+#### Login
+- POST `/users/login`
+
+```json
 {
   "email": "luiz@email.com",
   "password": "123456"
@@ -129,98 +174,126 @@ POST /users/login
 ```
 
 Resposta:
-```
+
+```json
 {
   "token": "JWT_AQUI"
 }
 ```
-✅ Tasks (rotas protegidas)
 
-Todas exigem header: Authorization: Bearer TOKEN
+---
 
-Criar task
+### ✅ Tasks (rotas protegidas)
 
-POST /tasks
-```
+> Todas exigem header: `Authorization: Bearer TOKEN`
+
+#### Criar task
+- POST `/tasks`
+
+```json
 {
   "title": "Minha task",
   "description": "Descrição opcional"
 }
 ```
-Listar tasks do usuário autenticado
 
-- GET /tasks
+#### Listar tasks do usuário autenticado
+- GET `/tasks`
 
-Atualizar task
+#### Atualizar task
+- PUT `/tasks/:id`
 
-- PUT /tasks/:id
-```
+```json
 {
   "title": "Novo título",
   "completed": true
 }
 ```
-Deletar task
 
-- DELETE /tasks/:id
-## 🧪 Testes Automatizados (Postman + Newman)
+#### Deletar task
+- DELETE `/tasks/:id`
 
-Este projeto possui collection e environment do Postman versionados para execução de testes automatizados.
+---
 
-▶️ Rodar os testes via terminal:
+## 🧪 Testes Automatizados
+
+### ✅ Jest + Supertest (backend)
+
+Rodar os testes:
+
+```bash
+npm test
 ```
+
+Os testes cobrem:
+- Healthcheck
+- Fluxo de autenticação
+- Criação de task autenticada
+- Listagem de tasks
+- Validação de respostas e status codes
+
+---
+
+### ✅ Postman + Newman (API)
+
+Rodar os testes via CLI:
+
+```bash
 npx newman run postman/collections/task-manager-api.postman_collection.json \
   -e postman/environments/local.postman_environment.json
 ```
-✅ O que os testes cobrem:
 
-Registro de usuário
+Os testes cobrem:
+- Registro de usuário
+- Login e captura automática do token
+- Criação de task autenticada
+- Listagem de tasks
+- Atualização de task
+- Exclusão de task
+- Casos de erro e validação
 
-Login e captura automática do token
+---
 
-Criação de task autenticada
+## 🤖 CI com GitHub Actions
 
-Listagem de tasks do usuário
+O projeto possui pipeline de CI que:
 
-Atualização de task
+- Instala dependências
+- Gera Prisma Client
+- Executa os testes com Jest
+- Falha o build se algum teste quebrar
 
-Exclusão de task
+O workflow roda automaticamente em:
+- Push na branch `main`
+- Pull Requests para `main`
 
-Validações de status code e formato de resposta
+---
 
-🛣️ Roadmap
+## 🛣️ Roadmap
 
-- CRUD de Tasks ✅
+- CRUD de Tasks ✅  
+- Validação de dados com Zod ✅  
+- CRUD de Usuários ✅  
+- Autenticação com JWT ✅  
+- Proteção de rotas ✅  
+- Swagger / OpenAPI ✅  
+- Testes automatizados com Postman + Newman ✅  
+- Testes automatizados com Jest + Supertest ✅  
+- CI com GitHub Actions ✅  
 
-- Validação de dados com Zod ✅
+---
 
-- CRUD de Usuários ✅
+## 📝 Observações
 
-- Autenticação com JWT ✅
+- O banco SQLite é usado apenas para desenvolvimento.
+- O projeto está em evolução contínua.
+- Cada etapa do roadmap gera commits incrementais.
+- Foco em boas práticas de backend, testes e qualidade de código.
 
-- Proteção de rotas ✅
+---
 
-- Testes automatizados com Postman + Newman ✅
+## 👨‍💻 Autor
 
-- Testes automatizados com Jest + Supertest ⏳
-
-- CI com GitHub Actions ⏳
-
-- Documentação com Swagger/OpenAPI ⏳
-
-📝 Observações
-
-O banco SQLite é utilizado apenas para desenvolvimento.
-
-O projeto está em evolução contínua.
-
-Cada etapa do roadmap gera commits incrementais e documentados.
-
-O foco do projeto é boas práticas de backend, testes e qualidade de código.
-
-👨‍💻 Autor
-
-Desenvolvido por **Luiz Felipe Carvalho**
-
+Desenvolvido por **Luiz Felipe Carvalho**  
 
 Projeto de estudo focado em backend, APIs REST e qualidade de software.
